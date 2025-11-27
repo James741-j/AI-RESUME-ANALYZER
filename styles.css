@@ -1,0 +1,203 @@
+/* Styles for AI Resume Analyzer — Modern, futuristic theme */
+
+:root{
+  --bg1: linear-gradient(135deg,#0f172a 0%, #061226 45%, #09203f 100%);
+  --glass: rgba(255,255,255,0.03);
+  --accent: linear-gradient(90deg,#7b61ff,#00d4ff);
+  --glass-2: rgba(255,255,255,0.04);
+  --card-glow: rgba(123,97,255,0.15);
+  --white: #e6eef6;
+}
+
+*{box-sizing:border-box}
+html,body,#app{height:100%}
+body{margin:0;font-family:'Inter', Arial, sans-serif;background:var(--bg1);color:var(--white);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+
+.bg-gradient{position:fixed;inset:0;z-index:0;background-image:radial-gradient(circle at 20% 10%, rgba(123,97,255,0.12), transparent 6%), radial-gradient(circle at 80% 80%, rgba(0,212,255,0.06), transparent 8%), linear-gradient(180deg, rgba(9,32,63,0.6), rgba(6,18,38,0.9));filter:blur(24px);transform:scale(1.1)}
+
+.container{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:4vh}
+
+.step{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:5vh;opacity:0;transform:scale(.98);pointer-events:none;transition:opacity .45s ease, transform .45s ease}
+.step.active{opacity:1;transform:scale(1);pointer-events:auto}
+
+/* Step transition animations */
+.step.animate-in{animation:stepIn .5s cubic-bezier(.2,.8,.2,1) both}
+.step.animate-out{animation:stepOut .4s cubic-bezier(.4,.0,.2,1) both}
+@keyframes stepIn{from{opacity:0;transform:translateY(20px) scale(.98);filter:blur(2px); } to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)} }
+@keyframes stepOut{from{opacity:1;transform:translateY(0) scale(1);filter:blur(0)} to{opacity:0;transform:translateY(-18px) scale(.985);filter:blur(2px)} }
+
+/* Card inner children staggered entrance */
+.card.animate-in > *{opacity:0;transform:translateY(8px);animation:cardChildIn .48s cubic-bezier(.2,.9,.2,1) both}
+.card.animate-in > *:nth-child(1){animation-delay:0.06s}
+.card.animate-in > *:nth-child(2){animation-delay:0.12s}
+.card.animate-in > *:nth-child(3){animation-delay:0.18s}
+.card.animate-in > *:nth-child(4){animation-delay:0.24s}
+.card.animate-in > *:nth-child(5){animation-delay:0.28s}
+.card.animate-in > *:nth-child(6){animation-delay:0.34s}
+@keyframes cardChildIn{from{opacity:0;transform:translateY(8px) scale(.995)} to{opacity:1;transform:translateY(0) scale(1)} }
+
+/* Card exit: fade out and slightly translate up */
+.card.animate-out{animation:cardOut .36s cubic-bezier(.4,.0,.2,1) both}
+@keyframes cardOut{from{opacity:1;transform:translateY(0)} to{opacity:0;transform:translateY(-10px) scale(.995)} }
+
+.card{width:100%;max-width:920px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));padding:36px;border-radius:20px;box-shadow:0 8px 40px rgba(4,11,20,0.5);border:1px solid rgba(255,255,255,0.04);backdrop-filter: blur(6px);min-height:420px;transition:max-width .32s ease, min-height .32s ease, transform .28s ease}
+.card-lg{max-width:1100px;padding:28px}
+
+/* Make cards for step 2 & 3 larger when active */
+.step[data-step="2"].active .card,
+.step[data-step="3"].active .card{
+  max-width:1200px; /* expand width */
+  min-height:640px; /* increase height to avoid being small */
+  transform:translateY(-6px) scale(1.01);
+}
+
+/* In case a class is present for JS expansion */
+.card.expanded{max-width:1200px;min-height:640px;transform:translateY(-6px) scale(1.01)}
+
+/* Ensure expanded cards fit on smaller screens */
+@media (max-width:1200px){
+  .card.expanded{max-width:100%;min-height:520px}
+}
+
+.title{margin:0;font-size:28px;font-weight:800;letter-spacing:-0.6px}
+.subtitle{font-weight:300;margin-top:6px;color:rgba(230,238,246,0.82)}
+
+.uploader{margin-top:22px}
+.upload-box{border:2px dashed rgba(255,255,255,0.06);padding:30px;border-radius:14px;text-align:center;color:rgba(230,238,246,0.7);cursor:pointer;transition:all .25s ease}
+.upload-box:hover{background:var(--glass);box-shadow:0 6px 18px rgba(0,0,0,0.6);transform:translateY(-3px)}
+
+/* Drag state visual */
+.upload-box.drag{border-color:rgba(123,97,255,0.9);box-shadow:0 12px 44px rgba(123,97,255,0.18);transform:scale(1.01)}
+
+/* emphasize interactive inputs to match theme */
+.format-select{background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));border:1px solid rgba(123,97,255,0.08);padding:8px 10px;border-radius:12px;box-shadow:0 6px 24px rgba(123,97,255,0.06)}
+
+/* Hide file input but keep visible label state */
+input[type="file"]{opacity:0;position:absolute;left:-9999px}
+
+/* Make sure upload box gets ripple feel as well */
+.upload-box{position:relative;overflow:hidden}
+.upload-box:hover::after{opacity:0.22}
+.upload-box::after{content:'';position:absolute;inset:0;border-radius:14px;background:linear-gradient(90deg, rgba(123,97,255,0.06), rgba(0,212,255,0.02));opacity:0;mix-blend-mode:screen;pointer-events:none;transition:opacity .18s ease}
+
+.controls{display:flex;gap:12px;justify-content:flex-end;margin-top:18px}
+.btn{padding:10px 16px;border-radius:12px;border:0;background:linear-gradient(90deg,rgba(255,255,255,0.02),transparent);color:var(--white);font-weight:600;cursor:pointer;box-shadow:inset 0 -1px 0 rgba(255,255,255,0.02)}
+.btn.small{padding:6px 10px;border-radius:10px;font-weight:500}
+.btn.primary{background:var(--accent);color:#00112a;box-shadow:0 6px 30px rgba(123,97,255,0.18);transition:all .2s ease}
+.btn.primary:hover{transform:translateY(-4px);filter:brightness(1.05)}
+.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);box-shadow:none}
+
+.btn.primary:active{transform:translateY(-1px) scale(.995)}
+.btn{position:relative;overflow:hidden;outline:none}
+
+/* Animated gradient shimmer on all buttons */
+.btn::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;mix-blend-mode:overlay;opacity:0.6;background:linear-gradient(90deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.0) 40%, rgba(255,255,255,0.06) 60%, rgba(255,255,255,0.0) 100%);background-size:200% 100%;transform:translateX(-50%);transition:opacity .25s ease}
+.btn:hover::after{opacity:1;animation:btnShimmer 1.6s linear infinite}
+
+@keyframes btnShimmer{from{background-position:0% 0%} to{background-position:200% 0%}}
+
+/* Neon glow for primary & action buttons */
+.btn.primary{box-shadow:0 10px 30px rgba(123,97,255,0.14), 0 2px 10px rgba(0,212,255,0.05);border-radius:12px}
+.btn.primary{background-image:linear-gradient(90deg,#7b61ff,#00d4ff);background-size:200% 100%;animation:btnGradient 6s linear infinite}
+@keyframes btnGradient{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.btn.ghost{border-color:rgba(123,97,255,0.15);box-shadow:0 6px 28px rgba(0,0,0,0.5), 0 0 30px rgba(123,97,255,0.06) inset}
+
+/* Hover & focus styles */
+.btn:focus{box-shadow:0 0 0 4px rgba(123,97,255,0.12), 0 10px 30px rgba(123,97,255,0.08);transform:translateY(-4px)}
+
+/* Tiny icon glow for small buttons */
+.btn.small{padding:6px 10px;border-radius:10px}
+
+/* Ripple effect element */
+.btn .ripple, .upload-box .ripple{position:absolute;border-radius:50%;transform:scale(0);opacity:0.4;pointer-events:none;background:radial-gradient(circle,#fff7, #fff0 40%);animation:rippleEffect 0.7s linear}
+@keyframes rippleEffect{to{transform:scale(6);opacity:0}}
+
+/* Gradients for ghost hover */
+.btn.ghost:hover{background:linear-gradient(90deg, rgba(123,97,255,0.06), rgba(0,212,255,0.02));transform:translateY(-4px)}
+
+/* Upload box shimmering border */
+.upload-box{position:relative}
+.upload-box::before{content:'';position:absolute;inset:-2px;border-radius:16px;background:linear-gradient(90deg,#7b61ff44,#00d4ff28);filter:blur(18px);opacity:0;transition:opacity .25s ease;z-index:-1}
+.upload-box:hover::before{opacity:1}
+
+/* Add focus-visible for accessibility */
+.btn:focus-visible{outline:none;box-shadow:0 0 0 4px rgba(0,212,255,0.18)}
+.select{background:transparent}
+
+.footer-note{font-size:12px;color:rgba(230,238,246,0.55);margin-top:12px}
+
+/* Debug panel */
+.debug-panel{position:fixed;right:18px;bottom:14px;width:min(520px,42vw);max-width:720px;background:linear-gradient(180deg, rgba(0,0,0,0.32), rgba(0,0,0,0.2));border-radius:12px;padding:8px;border:1px solid rgba(255,255,255,0.04);box-shadow:0 18px 80px rgba(0,0,0,0.45)}
+.debug-panel pre{white-space:pre-wrap;font-size:13px;border-radius:8px}
+
+/* API settings UI */
+.api-settings{margin-top:18px;padding:12px;border-radius:12px;background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03)}
+.api-row{display:flex;gap:12px;align-items:center;margin-bottom:8px}
+.api-row label{width:120px;color:rgba(230,238,246,0.7);font-weight:600}
+.api-row input[type="text"],.api-row input[type="password"]{flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:rgba(255,255,255,0.02);color:var(--white)}
+.api-row-controls{display:flex;gap:8px;align-items:center;justify-content:flex-start}
+.api-status{color:rgba(200,230,255,0.85);font-size:13px;margin-top:6px}
+
+.card-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
+.card-header h2{margin:0}
+
+.analysis-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
+.panel{background:linear-gradient(180deg, rgba(255,255,255,0.018), rgba(255,255,255,0.01));padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);min-height:160px}
+.panel h3{margin-top:0}
+.content{font-weight:300;color:rgba(230,238,246,0.9);line-height:1.45}
+
+/* Scrollable mode for panels */
+.panel.scrollable .content{max-height:min(320px,38vh);overflow:auto;padding-right:8px;transition:max-height .2s ease}
+.panel.scrollable .content::-webkit-scrollbar{width:10px}
+.panel.scrollable .content::-webkit-scrollbar-thumb{background:linear-gradient(90deg,#7b61ff,#00d4ff);border-radius:20px}
+.panel.scrollable .content::-webkit-scrollbar-track{background:transparent}
+
+/* Scroll button state */
+.btn[aria-pressed="true"]{background:linear-gradient(90deg,#00d4ff,#7b61ff);color:#00112a}
+
+/* special small button label 'Full' for description toggling */
+.btn.small.ghost[aria-pressed="true"]{background:linear-gradient(90deg,#7b61ff22,#00d4ff22);color:var(--white);box-shadow:0 6px 18px rgba(123,97,255,0.06)}
+
+.score-box{display:flex;align-items:center;gap:12px}
+.score-value{background:linear-gradient(90deg,#00d4ff,#7b61ff);-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:900;font-size:28px}
+.score-label{color:rgba(230,238,246,0.55)}
+
+.editor{display:flex;gap:18px}
+.editor-left,.editor-right{flex:1;min-height:420px;background:var(--glass);padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);}
+.enhanced-editor{height:100%;overflow:auto;white-space:pre-wrap}
+.preview{height:100%;overflow:auto;padding:16px;background:linear-gradient(180deg,#071024,rgba(9,20,36,0.18));border-radius:10px}
+.format-select{padding:8px;border-radius:10px;background:rgba(255,255,255,0.02);color:var(--white);border:0}
+.format-select:focus{outline:none;box-shadow:0 12px 34px rgba(123,97,255,0.08), 0 0 0 4px rgba(0,212,255,0.06)}
+
+/* Responsive */
+@media (max-width:900px){
+  .analysis-grid{grid-template-columns:1fr}
+  .editor{flex-direction:column}
+  .card{padding:22px}
+}
+
+/* Add micro animations */
+.upload-box::after{content:'';position:absolute;left:0;right:0;height:4px;bottom:8px;opacity:0;pointer-events:none}
+
+/* Glowing hover effect for buttons */
+.btn:hover{box-shadow:0 8px 26px rgba(0,0,0,0.45), 0 0 28px rgba(123,97,255,0.12) inset;border-color:rgba(255,255,255,0.06)}
+
+/* Add fade+scale transition for step changes */
+.step{transition:opacity .6s cubic-bezier(.2,.8,.2,1), transform .6s cubic-bezier(.2,.8,.2,1)}
+
+/* Ensure no overflow */
+html,body{overflow:hidden}
+.container{overflow:hidden}
+.card{overflow:auto}
+
+/* subtle floating icons or shapes */
+.bg-shapes{position:absolute;left:4%;top:10%;width:60px;height:60px;border-radius:50%;background:radial-gradient(circle,#7b61ff22,#00d4ff11);filter:blur(10px);}
+
+/* pretty scrollbars for editors */
+.enhanced-editor::-webkit-scrollbar,.preview::-webkit-scrollbar{height:10px;width:10px}
+.enhanced-editor::-webkit-scrollbar-thumb,.preview::-webkit-scrollbar-thumb{background:linear-gradient(90deg,#7b61ff,#00d4ff);border-radius:20px}
+
+/* Tiny decorative shimmer */
+.card::before{content:'';position:absolute;transform:translateY(-120%);width:180%;height:60%;left:-40%;background:linear-gradient(90deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.06) 45%, rgba(255,255,255,0.02) 100%);filter: blur(20px);opacity:0;pointer-events:none;transition:opacity .8s ease}
+.card:hover::before{opacity:1}

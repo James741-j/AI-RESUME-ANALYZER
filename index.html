@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AI Resume Analyzer — ResumeX</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app" class="app">
+    <div class="bg-gradient"></div>
+
+    <main class="container">
+      <!-- Steps are full-screen, only one visible at a time -->
+      <section id="step1" class="step active" data-step="1" aria-label="Upload Resume">
+        <div class="card">
+          <h1 class="title">AI Resume Analyzer</h1>
+          <p class="subtitle">Upload your resume (PDF or TXT) and get instant analysis & a polished enhanced version.</p>
+
+          <div class="uploader" id="uploader">
+            <input id="fileInput" type="file" accept="application/pdf,text/plain" />
+            <div class="upload-box" id="uploadBox">Drop or click to select a resume (PDF/TXT)</div>
+          </div>
+
+          <div class="controls">
+            <button id="goAnalyze" class="btn primary" disabled>Analyze Resume</button>
+            <button id="skipToStep2" class="btn ghost">Try Demo Resume</button>
+            <button id="runSelfTest" class="btn small ghost" title="Run self test">Run Self-Test</button>
+          </div>
+
+          <!-- API settings were removed - embed the API key directly in script.js (GEMINI_API_KEY) -->
+
+          <footer class="footer-note">We value privacy — all processing is done locally in your browser.</footer>
+        </div>
+      </section>
+
+      <section id="step2" class="step" data-step="2" aria-label="Resume Analysis">
+        <div class="card card-lg">
+          <header class="card-header">
+            <button id="backToStep1" class="btn ghost small">← Back</button>
+            <h2>Resume Analysis</h2>
+            <div>
+              <div class="score-box">
+                <div class="score-value" id="atsScore">--</div>
+                <small class="score-label">ATS Score</small>
+              </div>
+            </div>
+          </header>
+
+          <div class="analysis-grid">
+            <div class="panel">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+                <h3>Description</h3>
+                <div style="display:flex;gap:8px;align-items:center">
+                  <button id="toggleScrollDesc" class="btn small ghost" aria-pressed="false" title="Toggle scroll">Scroll</button>
+                  <button id="toggleFullDesc" class="btn small ghost" aria-pressed="false" title="Show full text">Full</button>
+                </div>
+              </div>
+                <div id="description" class="content">Upload a resume to see description.</div>
+            </div>
+            <div class="panel">
+              <h3>Detected Roles</h3>
+              <div id="roles" class="content">—</div>
+            </div>
+            <div class="panel">
+              <h3>Issues & Problems</h3>
+              <div id="issues" class="content">—</div>
+            </div>
+            <div class="panel">
+              <h3>Improvement Strategies</h3>
+              <div id="strategies" class="content">—</div>
+            </div>
+          </div>
+
+          <div class="controls">
+            <button id="prevStep2" class="btn ghost">← Back</button>
+            <button id="toStep3" class="btn primary">Generate Enhanced Resume →</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="step3" class="step" data-step="3" aria-label="Enhanced Resume Output">
+        <div class="card card-lg">
+          <header class="card-header">
+            <button id="backToStep2" class="btn ghost small">← Back</button>
+            <h2>Enhanced Resume</h2>
+            <div class="download-controls">
+              <select id="fileFormat" class="format-select">
+                <option value="txt">TXT</option>
+                <option value="doc">DOC</option>
+                <option value="docx">DOCX</option>
+                <option value="pdf">PDF</option>
+              </select>
+              <button id="downloadBtn" class="btn primary">Download</button>
+            </div>
+          </header>
+
+          <div class="editor">
+            <div class="editor-left">
+              <h3>Editable Enhanced Resume</h3>
+              <div id="enhancedEditor" class="enhanced-editor" contenteditable="true"></div>
+            </div>
+            <div class="editor-right">
+              <h3>Preview</h3>
+              <div id="preview" class="preview"></div>
+            </div>
+          </div>
+
+          <div class="controls">
+            <button id="startOverBtn" class="btn ghost">Start Over</button>
+            <button id="finalizeBtn" class="btn primary">Finalize & Download</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+    <div id="debugPanel" class="debug-panel" style="display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px;border-bottom:1px solid rgba(255,255,255,0.03)">
+        <strong>Debug Output</strong>
+        <div>
+          <button id="hideDebug" class="btn small ghost">Hide</button>
+          <button id="copyDebug" class="btn small primary">Copy</button>
+        </div>
+      </div>
+      <pre id="debugOutput" style="padding:12px;max-height:260px;overflow:auto;background:rgba(0,0,0,0.28);margin:12px;border-radius:10px;color:var(--white)"></pre>
+    </div>
+
+    <template id="demoTextTemplate">
+      <p><strong>About</strong>: Curious and results-oriented Software Developer with 5+ years building scalable web apps and tools using JavaScript, Node.js and React.</p>
+    </template>
+
+  </div>
+
+  <!-- Libraries: PDF.js & jsPDF (CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- docx library for client-side docx generation -->
+  <script src="https://cdn.jsdelivr.net/npm/docx@7.3.1/build/index.umd.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
